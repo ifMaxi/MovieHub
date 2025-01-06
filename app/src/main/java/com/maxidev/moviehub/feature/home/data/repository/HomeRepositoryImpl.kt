@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.maxidev.moviehub.common.data.remote.ApiService
+import com.maxidev.moviehub.common.utils.Constants.INITIAL_LOAD_SIZE
 import com.maxidev.moviehub.common.utils.Constants.PAGE_SIZE
 import com.maxidev.moviehub.feature.home.data.paging.NowPlayingMoviesPagingSource
 import com.maxidev.moviehub.feature.home.data.paging.PopularMoviesPagingSource
@@ -26,6 +27,7 @@ class HomeRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
+                initialLoadSize = INITIAL_LOAD_SIZE,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = sourceFactory
@@ -38,6 +40,7 @@ class HomeRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
+                initialLoadSize = INITIAL_LOAD_SIZE,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = sourceFactory
@@ -50,6 +53,7 @@ class HomeRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
+                initialLoadSize = INITIAL_LOAD_SIZE,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = sourceFactory
@@ -62,6 +66,7 @@ class HomeRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
+                initialLoadSize = INITIAL_LOAD_SIZE,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = sourceFactory
@@ -74,6 +79,7 @@ class HomeRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
+                initialLoadSize = INITIAL_LOAD_SIZE,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = sourceFactory

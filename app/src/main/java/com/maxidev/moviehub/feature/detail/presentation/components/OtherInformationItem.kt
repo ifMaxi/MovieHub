@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
 import com.maxidev.moviehub.common.utils.formatDateUtils
+import kotlin.math.roundToInt
 
 @Composable
 fun OtherInformationItem(
@@ -65,7 +66,7 @@ fun OtherInformationItem(
                 style = textStyle
             )
             Text(
-                text = "• Rating: $voteAverage ⭐",
+                text = "• Rating: ${voteAverage.roundToInt()} ⭐",
                 style = textStyle
             )
         }

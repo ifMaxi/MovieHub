@@ -14,13 +14,15 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -40,7 +42,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -51,6 +53,8 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.maxidev.moviehub.R
+import com.maxidev.moviehub.feature.components.HeaderItem
 import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.navigation.NavDestinations
@@ -97,13 +101,13 @@ private fun ScreenContent(
     val topRatedMoviesState = state.topRatedMovies.collectAsLazyPagingItems()
     val upcomingMoviesState = state.upcomingMovies.collectAsLazyPagingItems()
     val rememberPullToRefreshState = rememberPullToRefreshState()
-    val lazyListState = rememberLazyListState()
+    val verticalScrollState = rememberScrollState()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBarItem(
-                title = "MovieHub",
+                title = R.string.app_name,
                 navigationIcon = { /* Do nothing. */ },
                 actions = { /* Do nothing. */ },
                 scrollBehavior = scrollBehavior
@@ -112,151 +116,128 @@ private fun ScreenContent(
     ) { innerPadding ->
         PullToRefreshBox(
             isRefreshing = false,
-            onRefresh = {
-                onEvent(HomeUiEvents.OnPullToRefresh)
-            },
+            onRefresh = { onEvent(HomeUiEvents.OnPullToRefresh) },
             state = rememberPullToRefreshState
         ) {
-            LazyColumn(
-                state = lazyListState,
-                contentPadding = innerPadding,
+            // Column is used instead of LazyColumn to avoid long GC "freezes".
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(verticalScrollState),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item {
-                    Column(
-                        modifier = Modifier.fillParentMaxWidth()
-                    ) {
-                        Text(
-                            text = "Now playing",
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
-                        PagerRowItem(
-                            items = nowPlayingMoviesState,
-                            content = {
-                                ImageItem(
-                                    modifier = Modifier
-                                        .height(300.dp)
-                                        .aspectRatio(2f / 3f),
-                                    imageUrl = it.posterPath,
-                                    contentScale = ContentScale.FillBounds,
-                                    navigateToDetail = {
-                                        onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
-                                    }
-                                )
+                HeaderItem(
+                    header = R.string.now_playing,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(horizontal = 10.dp, vertical = 16.dp)
+                )
+                PagerRowItem(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    items = nowPlayingMoviesState,
+                    key = { key -> key.id },
+                    content = {
+                        ImageItem(
+                            modifier = Modifier
+                                .height(300.dp)
+                                .aspectRatio(2f / 3f),
+                            imageUrl = it.posterPath,
+                            contentScale = ContentScale.FillBounds,
+                            navigateToDetail = {
+                                onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
                             }
                         )
                     }
-                }
-                item {
-                    Column(
-                        modifier = Modifier.fillParentMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = "Trending today",
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
-                        PagedRow(
-                            items = trendingMoviesState,
-                            content = {
-                                ImageItem(
-                                    modifier = Modifier
-                                        .height(200.dp),
-                                    imageUrl = it.posterPath,
-                                    contentScale = ContentScale.FillBounds,
-                                    navigateToDetail = {
-                                        onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
-                                    }
-                                )
+                )
+                HeaderItem(
+                    header = R.string.trending_today,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(horizontal = 10.dp, vertical = 16.dp)
+                )
+                PagedRow(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    items = trendingMoviesState,
+                    key = { key -> key.id },
+                    content = {
+                        ImageItem(
+                            modifier = Modifier
+                                .height(200.dp),
+                            imageUrl = it.posterPath,
+                            contentScale = ContentScale.FillBounds,
+                            navigateToDetail = {
+                                onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
                             }
                         )
                     }
-                }
-                item {
-                    Column(
-                        modifier = Modifier.fillParentMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = "Popular",
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
-                        PagedRow(
-                            items = popularMoviesState,
-                            content = {
-                                ImageItem(
-                                    modifier = Modifier
-                                        .height(200.dp),
-                                    imageUrl = it.posterPath,
-                                    contentScale = ContentScale.FillBounds,
-                                    navigateToDetail = {
-                                        onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
-                                    }
-                                )
+                )
+                HeaderItem(
+                    header = R.string.popular,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(horizontal = 10.dp, vertical = 16.dp)
+                )
+                PagedRow(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    items = popularMoviesState,
+                    key = { key -> key.id },
+                    content = {
+                        ImageItem(
+                            modifier = Modifier
+                                .height(200.dp),
+                            imageUrl = it.posterPath,
+                            contentScale = ContentScale.FillBounds,
+                            navigateToDetail = {
+                                onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
                             }
                         )
                     }
-                }
-                item {
-                    Column(
-                        modifier = Modifier.fillParentMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = "Top rated",
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
-                        PagedRow(
-                            items = topRatedMoviesState,
-                            content = {
-                                ImageItem(
-                                    modifier = Modifier
-                                        .height(200.dp),
-                                    imageUrl = it.posterPath,
-                                    contentScale = ContentScale.FillBounds,
-                                    navigateToDetail = {
-                                        onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
-                                    }
-                                )
+                )
+                HeaderItem(
+                    header = R.string.top_rated,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(horizontal = 10.dp, vertical = 16.dp)
+                )
+                PagedRow(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    items = topRatedMoviesState,
+                    key = { key -> key.id },
+                    content = {
+                        ImageItem(
+                            modifier = Modifier
+                                .height(200.dp),
+                            imageUrl = it.posterPath,
+                            contentScale = ContentScale.FillBounds,
+                            navigateToDetail = {
+                                onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
                             }
                         )
                     }
-                }
-                item {
-                    Column(
-                        modifier = Modifier.fillParentMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = "Upcoming",
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
-                        PagedRow(
-                            items = upcomingMoviesState,
-                            content = {
-                                ImageItem(
-                                    modifier = Modifier
-                                        .height(200.dp),
-                                    imageUrl = it.posterPath,
-                                    contentScale = ContentScale.FillBounds,
-                                    navigateToDetail = {
-                                        onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
-                                    }
-                                )
+                )
+                HeaderItem(
+                    header = R.string.upcoming,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(horizontal = 10.dp, vertical = 16.dp)
+                )
+                PagedRow(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    items = upcomingMoviesState,
+                    key = { key -> key.id },
+                    content = {
+                        ImageItem(
+                            modifier = Modifier
+                                .height(200.dp),
+                            imageUrl = it.posterPath,
+                            contentScale = ContentScale.FillBounds,
+                            navigateToDetail = {
+                                onEvent(HomeUiEvents.NavigateToDetail(id = it.id))
                             }
                         )
                     }
-                }
+                )
             }
         }
     }
@@ -266,6 +247,7 @@ private fun ScreenContent(
 private fun <T: Any> PagerRowItem(
     modifier: Modifier = Modifier,
     items: LazyPagingItems<T>,
+    key: ((item: T) -> Any),
     content: @Composable (T) -> Unit
 ) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { items.itemCount })
@@ -298,6 +280,7 @@ private fun <T: Any> PagerRowItem(
         contentAlignment = Alignment.Center
     ) {
         HorizontalPager(
+            key = { key(items[it]!!) },
             state = pagerState,
             contentPadding = PaddingValues(horizontal = 50.dp),
             pageSpacing = 4.dp
@@ -305,6 +288,7 @@ private fun <T: Any> PagerRowItem(
             val item = items[pager]
 
             Card(
+                elevation = CardDefaults.cardElevation(6.dp),
                 modifier = Modifier
                     .layout { measurable, constraints ->
                         val placeable = measurable.measure(constraints)
@@ -358,7 +342,7 @@ private fun <T: Any> PagerRowItem(
                     ) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "No data available",
+                            text = stringResource(R.string.no_data_available),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -373,15 +357,9 @@ private fun <T: Any> PagerRowItem(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             text = when ((loadStates.refresh as LoadState.Error).error) {
-                                is HttpException -> {
-                                    "Oops, something went wrong!"
-                                }
-                                is IOException -> {
-                                    "Couldn't reach server, check your internet connection!"
-                                }
-                                else -> {
-                                    "Unknown error occurred"
-                                }
+                                is HttpException -> { stringResource(R.string.something_wrong) }
+                                is IOException -> { stringResource(R.string.internet_problem) }
+                                else -> { stringResource(R.string.unknown_error) }
                             },
                             textAlign = TextAlign.Center
                         )
@@ -407,7 +385,7 @@ private fun <T: Any> PagerRowItem(
                     ) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "An error occurred",
+                            text = stringResource(R.string.error_occurred),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -421,6 +399,7 @@ private fun <T: Any> PagerRowItem(
 private fun <T: Any> PagedRow(
     modifier: Modifier = Modifier,
     items: LazyPagingItems<T>,
+    key: ((item: T) -> Any),
     content: @Composable (T) -> Unit
 ) {
     Box(
@@ -428,12 +407,14 @@ private fun <T: Any> PagedRow(
         contentAlignment = Alignment.Center
     ) {
         LazyRow(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            items(count = items.itemCount) {
+            items(
+                count = items.itemCount,
+                key = { key(items[it]!!) }
+            ) {
                 val item = items[it]
 
                 if (item != null) {
@@ -467,7 +448,7 @@ private fun <T: Any> PagedRow(
                                 Text(
                                     modifier = Modifier
                                         .fillMaxWidth(),
-                                    text = "No data available",
+                                    text = stringResource(R.string.no_data_available),
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -486,17 +467,9 @@ private fun <T: Any> PagedRow(
                                     modifier = Modifier
                                         .fillMaxWidth(),
                                     text = when ((loadStates.refresh as LoadState.Error).error) {
-                                        is HttpException -> {
-                                            "Oops, something went wrong!"
-                                        }
-
-                                        is IOException -> {
-                                            "Couldn't reach server, check your internet connection!"
-                                        }
-
-                                        else -> {
-                                            "Unknown error occurred"
-                                        }
+                                        is HttpException -> { stringResource(R.string.something_wrong) }
+                                        is IOException -> { stringResource(R.string.internet_problem) }
+                                        else -> { stringResource(R.string.unknown_error) }
                                     },
                                     textAlign = TextAlign.Center
                                 )
@@ -528,7 +501,7 @@ private fun <T: Any> PagedRow(
                             ) {
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
-                                    text = "An error occurred",
+                                    text = stringResource(R.string.error_occurred),
                                     textAlign = TextAlign.Center
                                 )
                             }

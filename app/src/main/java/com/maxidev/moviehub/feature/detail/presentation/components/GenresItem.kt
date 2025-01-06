@@ -7,10 +7,15 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,11 +40,19 @@ fun GenresItem(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             genres.forEach { genre ->
-                Text(
-                    text = "\"$genre\"",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Light
-                )
+                Card(
+                    elevation = CardDefaults.cardElevation(6.dp),
+                    shape = CircleShape
+                ) {
+                    Text(
+                        text = "\"$genre\"",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp, vertical = 8.dp)
+                            .semantics { contentDescription = genre }
+                    )
+                }
             }
         }
     }

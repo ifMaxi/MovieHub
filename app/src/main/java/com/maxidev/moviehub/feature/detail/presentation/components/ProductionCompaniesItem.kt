@@ -11,10 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.maxidev.moviehub.R
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -35,7 +37,7 @@ fun ProductionCompaniesItem(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = "Production companies",
+                text = stringResource(R.string.production_companies),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium
             )

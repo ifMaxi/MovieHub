@@ -34,6 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.maxidev.moviehub.R
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
 import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.SearchBarItem
@@ -117,13 +121,14 @@ private fun SearchContent(
                 onSearch = onSearch,
                 placeholder = {
                     Text(
-                        text = "Search"
+                        text = stringResource(R.string.search),
+                        modifier = Modifier.semantics { contentDescription = "Search" }
                     )
                 },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = null
+                        contentDescription = stringResource(R.string.search)
                     )
                 },
                 trailingIcon = {
@@ -131,7 +136,7 @@ private fun SearchContent(
                         IconButton(onClick = clearText) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
-                                contentDescription = null
+                                contentDescription = stringResource(R.string.clear)
                             )
                         }
                     }
@@ -172,9 +177,8 @@ private fun SearchContent(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    text = "No data available",
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(R.string.no_data_available),
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -188,20 +192,11 @@ private fun SearchContent(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
+                                    modifier = Modifier.fillMaxWidth(),
                                     text = when ((loadStates.refresh as LoadState.Error).error) {
-                                        is HttpException -> {
-                                            "Oops, something went wrong!"
-                                        }
-
-                                        is IOException -> {
-                                            "Couldn't reach server, check your internet connection!"
-                                        }
-
-                                        else -> {
-                                            "Unknown error occurred"
-                                        }
+                                        is HttpException -> { stringResource(R.string.something_wrong) }
+                                        is IOException -> { stringResource(R.string.internet_problem) }
+                                        else -> { stringResource(R.string.unknown_error) }
                                     },
                                     textAlign = TextAlign.Center
                                 )
@@ -233,7 +228,7 @@ private fun SearchContent(
                             ) {
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
-                                    text = "An error occurred",
+                                    text = stringResource(R.string.something_wrong),
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -272,14 +267,16 @@ private fun ResultItem(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ImageItem(
-                    modifier = Modifier
-                        .height(150.dp)
-                        .aspectRatio(2f / 3f),
-                    imageUrl = posterPath,
-                    contentScale = ContentScale.FillBounds,
-                    navigateToDetail = {}
-                )
+                if (posterPath.isNotEmpty() || posterPath.isNotBlank()) {
+                    ImageItem(
+                        modifier = Modifier
+                            .height(150.dp)
+                            .aspectRatio(2f / 3f),
+                        imageUrl = posterPath,
+                        contentScale = ContentScale.FillBounds,
+                        navigateToDetail = {}
+                    )
+                }
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -290,7 +287,12 @@ private fun ResultItem(
                     Text(
                         text = name,
                         fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(Alignment.Start)
+                        fontSize = 18.sp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .semantics { contentDescription = name }
                     )
                     Text(
                         text = overview,
@@ -299,12 +301,16 @@ private fun ResultItem(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         lineHeight = 20.sp,
-                        modifier = Modifier.align(Alignment.Start)
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .semantics { contentDescription = overview }
                     )
                     Text(
                         text = "⭐ ${voteAverage.roundToInt()} / 10",
                         fontSize = 12.sp,
-                        modifier = Modifier.align(Alignment.Start)
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .semantics { contentDescription = "$voteAverage" }
                     )
                 }
             }

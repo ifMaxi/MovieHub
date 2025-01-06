@@ -46,7 +46,7 @@ fun SearchBarItem(
             },
             expanded = isExpanded,
             onExpandedChange = onExpandedChange,
-            shape = RoundedCornerShape(4),
+            shape = RoundedCornerShape(5),
             shadowElevation = 6.dp
         ) {
             /* Do nothing. */

@@ -30,10 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.maxidev.moviehub.R
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.detail.domain.model.MovieDetail
 import com.maxidev.moviehub.feature.detail.presentation.components.BelongsToCollectionItem
@@ -43,6 +45,10 @@ import com.maxidev.moviehub.feature.detail.presentation.components.OverviewItem
 import com.maxidev.moviehub.feature.detail.presentation.components.PosterWithTextItem
 import com.maxidev.moviehub.feature.detail.presentation.components.ProductionCompaniesItem
 import kotlinx.coroutines.launch
+
+// TODO: Navigate to collection
+// TODO: Add movie images
+// TODO: Add credits
 
 @Composable
 fun MovieDetailView(
@@ -81,7 +87,7 @@ fun MovieDetailView(
                     navController.popBackStack()
                 }
                 is MovieDetailUiEvents.ShareIntent -> {
-                    context.startActivity(chooser) // TODO: Fix intent.
+                    context.startActivity(chooser)
                 }
             }
         }
@@ -128,7 +134,7 @@ private fun ScreenContent(
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBackIosNew,
-                            contentDescription = "Navigate back."
+                            contentDescription = stringResource(R.string.navigate_back)
                         )
                     }
                 },
@@ -141,7 +147,7 @@ private fun ScreenContent(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Share,
-                                contentDescription = "Share movie."
+                                contentDescription = stringResource(R.string.share)
                             )
                         }
                     }

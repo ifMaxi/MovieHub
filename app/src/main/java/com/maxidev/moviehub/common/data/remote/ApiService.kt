@@ -32,7 +32,8 @@ interface ApiService {
     @GET(SEARCH)
     suspend fun getSearch(
         @Query("query") query: String,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("include_adult") includeAdult: Boolean = false
     ): SearchDto
 }
 

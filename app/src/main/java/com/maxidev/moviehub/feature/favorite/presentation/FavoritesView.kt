@@ -5,6 +5,7 @@ package com.maxidev.moviehub.feature.favorite.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -23,9 +24,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.maxidev.moviehub.R
 import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.detail.domain.model.MovieDetail
@@ -61,13 +64,13 @@ private fun FavoritesScreenContent(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBarItem(
-                title = "Favorites",
+                title = R.string.favorites,
                 navigationIcon = {},
                 actions = {
                     IconButton(onClick = { onEvent(FavoritesUiEvents.DeleteAllFavorites) }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete all favorites"
+                            contentDescription = stringResource(R.string.delete_all_favorites)
                         )
                     }
                 },
@@ -76,14 +79,17 @@ private fun FavoritesScreenContent(
         }
     ) { innerPadding ->
         LazyVerticalGrid(
+            modifier = Modifier.padding(horizontal = 10.dp),
             contentPadding = innerPadding,
             state = lazyGridState,
             columns = GridCells.Adaptive(120.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(
-                items = favorites
+                items = favorites,
+                key = { key -> key.id },
+                contentType = { type -> type::class }
             ) { movie ->
                 ImageItem(
                     modifier = Modifier
@@ -97,3 +103,5 @@ private fun FavoritesScreenContent(
         }
     }
 }
+
+// TODO: Add alert dialog to delete all favorites.
