@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">MovieHub</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="popular">Popular</string>
+    <string name="trending_today">Trending today</string>
+    <string name="top_rated">Top rated</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="favorites">Favorites</string>,
+    <string name="search">Search</string>
+    <string name="no_data_available">No data available</string>
+    <string name="something_wrong">Oops! Something went wrong</string>
+    <string name="internet_problem">"Couldn't reach server, check your internet connection!"</string>
+    <string name="unknown_error">"Unknown error occurred"</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="clear">Clear</string>
+    <string name="delete_all_favorites">Delete all favorites.</string>
+    <string name="empty_resource">""</string>
+    <string name="navigate_back">Navigate back</string>
+    <string name="share">Share</string>
+    <string name="part_of_the_collection">Part of the collection</string>
+    <string name="production_companies">Production companies</string>
 </resources>
