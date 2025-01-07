@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +25,7 @@ class HomeViewModel @Inject constructor(
         getTopRatedMovies()
         getPopularMovies()
         getUpcomingMovies()
+        getGenres()
     }
 
     private fun getTrendingMovies() {
@@ -68,6 +70,16 @@ class HomeViewModel @Inject constructor(
                 topRatedMovies = repository.fetchTopRatedMovies()
                     .cachedIn(viewModelScope)
             )
+        }
+    }
+
+    private fun getGenres() {
+        viewModelScope.launch {
+            _homeState.update { genre ->
+                genre.copy(
+                    genres = repository.fetchGenres()
+                )
+            }
         }
     }
 

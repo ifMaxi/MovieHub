@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -57,6 +59,8 @@ import com.maxidev.moviehub.R
 import com.maxidev.moviehub.feature.components.HeaderItem
 import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.TopBarItem
+import com.maxidev.moviehub.feature.home.domain.model.Genres
+import com.maxidev.moviehub.feature.home.presentation.components.GenreItem
 import com.maxidev.moviehub.feature.navigation.NavDestinations
 import kotlinx.coroutines.delay
 import retrofit2.HttpException
@@ -100,6 +104,7 @@ private fun ScreenContent(
     val popularMoviesState = state.popularMovies.collectAsLazyPagingItems()
     val topRatedMoviesState = state.topRatedMovies.collectAsLazyPagingItems()
     val upcomingMoviesState = state.upcomingMovies.collectAsLazyPagingItems()
+    val genresState = state.genres
     val rememberPullToRefreshState = rememberPullToRefreshState()
     val verticalScrollState = rememberScrollState()
 
@@ -127,6 +132,15 @@ private fun ScreenContent(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                HeaderItem(
+                    header = R.string.genres,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(horizontal = 10.dp, vertical = 16.dp)
+                )
+                GenresContent(
+                    genres = genresState
+                )
                 HeaderItem(
                     header = R.string.now_playing,
                     modifier = Modifier
@@ -238,6 +252,35 @@ private fun ScreenContent(
                         )
                     }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun GenresContent(
+    modifier: Modifier = Modifier,
+    genres: List<Genres>
+) {
+    val lazyState = rememberLazyListState()
+
+    if (genres.isNotEmpty()) {
+        Box(
+            modifier = modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            LazyRow(
+                state = lazyState,
+                contentPadding = PaddingValues(horizontal = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(
+                    items = genres,
+                    key = { key -> key.id }
+                ) { genre ->
+                    GenreItem(name = genre.name)
+                }
             }
         }
     }

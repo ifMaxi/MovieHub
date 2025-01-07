@@ -1,5 +1,6 @@
 package com.maxidev.moviehub.common.data.remote
 
+import com.maxidev.moviehub.common.data.remote.dto.GenresDto
 import com.maxidev.moviehub.common.data.remote.dto.MovieDetailDto
 import com.maxidev.moviehub.common.data.remote.dto.MoviesDto
 import com.maxidev.moviehub.common.data.remote.dto.SearchDto
@@ -9,7 +10,6 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    // Movies
     @GET(MOVIES + NOW_PLAYING)
     suspend fun getNowPlayingMovies(@Query("page") page: Int): MoviesDto
 
@@ -28,13 +28,15 @@ interface ApiService {
     @GET(MOVIE_DETAIL)
     suspend fun getMovieDetail(@Path("movie_id") movieId: Int): MovieDetailDto
 
-    // Search
     @GET(SEARCH)
     suspend fun getSearch(
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean = false
     ): SearchDto
+
+    @GET(GENRES)
+    suspend fun getGenres(): GenresDto
 }
 
 private const val MOVIES = "movie/"
@@ -46,3 +48,4 @@ private const val TRENDING = "trending/"
 private const val SEARCH = "search/movie"
 private const val MOVIE_DETAIL = "movie/{movie_id}"
 private const val DAY = "day"
+private const val GENRES = "genre/movie/list"

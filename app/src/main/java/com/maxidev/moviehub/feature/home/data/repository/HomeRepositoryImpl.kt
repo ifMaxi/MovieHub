@@ -11,9 +11,13 @@ import com.maxidev.moviehub.feature.home.data.paging.PopularMoviesPagingSource
 import com.maxidev.moviehub.feature.home.data.paging.TopRatedMoviesPagingSource
 import com.maxidev.moviehub.feature.home.data.paging.TrendingMoviesPagingSource
 import com.maxidev.moviehub.feature.home.data.paging.UpcomingPagingSource
+import com.maxidev.moviehub.feature.home.domain.mappers.asExternal
+import com.maxidev.moviehub.feature.home.domain.model.Genres
 import com.maxidev.moviehub.feature.home.domain.model.Movies
 import com.maxidev.moviehub.feature.home.domain.repository.HomeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
@@ -85,4 +89,9 @@ class HomeRepositoryImpl @Inject constructor(
             pagingSourceFactory = sourceFactory
         ).flow
     }
+
+    override suspend fun fetchGenres(): List<Genres> =
+        withContext(Dispatchers.IO) {
+            apiService.getGenres().asExternal() ?: emptyList()
+        }
 }
