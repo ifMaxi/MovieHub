@@ -3,6 +3,7 @@ package com.maxidev.moviehub.feature.home.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.filter
 import com.maxidev.moviehub.common.data.remote.ApiService
 import com.maxidev.moviehub.common.utils.Constants.INITIAL_LOAD_SIZE
 import com.maxidev.moviehub.common.utils.Constants.PAGE_SIZE
@@ -17,6 +18,7 @@ import com.maxidev.moviehub.feature.home.domain.model.Movies
 import com.maxidev.moviehub.feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -36,6 +38,15 @@ class HomeRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = sourceFactory
         ).flow
+            .map { pagingData ->
+                val uniqueImage = mutableSetOf<String>()
+
+                pagingData.filter { image ->
+                    if (uniqueImage.contains(image.posterPath)) false else {
+                        uniqueImage.add(image.posterPath)
+                    }
+                }
+            }
     }
 
     override fun fetchNowPlayingMovies(): Flow<PagingData<Movies>> {
@@ -49,6 +60,15 @@ class HomeRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = sourceFactory
         ).flow
+            .map { pagingData ->
+                val uniqueImage = mutableSetOf<String>()
+
+                pagingData.filter { image ->
+                    if (uniqueImage.contains(image.posterPath)) false else {
+                        uniqueImage.add(image.posterPath)
+                    }
+                }
+            }
     }
 
     override fun fetchPopularMovies(): Flow<PagingData<Movies>> {
@@ -62,6 +82,15 @@ class HomeRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = sourceFactory
         ).flow
+            .map { pagingData ->
+                val uniqueImage = mutableSetOf<String>()
+
+                pagingData.filter { image ->
+                    if (uniqueImage.contains(image.posterPath)) false else {
+                        uniqueImage.add(image.posterPath)
+                    }
+                }
+            }
     }
 
     override fun fetchUpcomingMovies(): Flow<PagingData<Movies>> {
@@ -75,6 +104,15 @@ class HomeRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = sourceFactory
         ).flow
+            .map { pagingData ->
+                val uniqueImage = mutableSetOf<String>()
+
+                pagingData.filter { image ->
+                    if (uniqueImage.contains(image.posterPath)) false else {
+                        uniqueImage.add(image.posterPath)
+                    }
+                }
+            }
     }
 
     override fun fetchTopRatedMovies(): Flow<PagingData<Movies>> {
@@ -88,6 +126,15 @@ class HomeRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = sourceFactory
         ).flow
+            .map { pagingData ->
+                val uniqueImage = mutableSetOf<String>()
+
+                pagingData.filter { image ->
+                    if (uniqueImage.contains(image.posterPath)) false else {
+                        uniqueImage.add(image.posterPath)
+                    }
+                }
+            }
     }
 
     override suspend fun fetchGenres(): List<Genres> =

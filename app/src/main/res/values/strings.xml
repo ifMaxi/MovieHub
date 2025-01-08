@@ -20,4 +20,6 @@
     <string name="part_of_the_collection">Part of the collection</string>
     <string name="production_companies">Production companies</string>
     <string name="genres">Genres</string>
+    <string name="background_images">Background images</string>
+    <string name="cast">Cast</string>
 </resources>

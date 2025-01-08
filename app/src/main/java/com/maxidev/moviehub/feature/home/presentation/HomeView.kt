@@ -58,6 +58,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.feature.components.HeaderItem
 import com.maxidev.moviehub.feature.components.ImageItem
+import com.maxidev.moviehub.feature.components.PagedRow
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.home.domain.model.Genres
 import com.maxidev.moviehub.feature.home.presentation.components.GenreItem
@@ -431,124 +432,6 @@ private fun <T: Any> PagerRowItem(
                             text = stringResource(R.string.error_occurred),
                             textAlign = TextAlign.Center
                         )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun <T: Any> PagedRow(
-    modifier: Modifier = Modifier,
-    items: LazyPagingItems<T>,
-    key: ((item: T) -> Any),
-    content: @Composable (T) -> Unit
-) {
-    Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items(
-                count = items.itemCount,
-                key = { key(items[it]!!) }
-            ) {
-                val item = items[it]
-
-                if (item != null) {
-                    content(item)
-                }
-            }
-
-            items.loadState.let { loadStates ->
-                when {
-                    loadStates.refresh is LoadState.Loading -> {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .align(Alignment.Center),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(strokeWidth = 2.dp)
-                            }
-                        }
-                    }
-
-                    loadStates.refresh is LoadState.NotLoading && items.itemCount < 1 -> {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .align(Alignment.Center),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    text = stringResource(R.string.no_data_available),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-                    }
-
-                    loadStates.refresh is LoadState.Error -> {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .align(Alignment.Center),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    text = when ((loadStates.refresh as LoadState.Error).error) {
-                                        is HttpException -> { stringResource(R.string.something_wrong) }
-                                        is IOException -> { stringResource(R.string.internet_problem) }
-                                        else -> { stringResource(R.string.unknown_error) }
-                                    },
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-                    }
-
-                    loadStates.append is LoadState.Loading -> {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .size(16.dp),
-                                    strokeWidth = 2.dp
-                                )
-                            }
-                        }
-                    }
-
-                    loadStates.append is LoadState.Error -> {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    text = stringResource(R.string.error_occurred),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
                     }
                 }
             }

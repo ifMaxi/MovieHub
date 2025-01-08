@@ -2,6 +2,7 @@ package com.maxidev.moviehub.feature.detail.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.maxidev.moviehub.feature.detail.domain.model.MovieDetail
 import com.maxidev.moviehub.feature.detail.domain.repository.MovieDetailRepository
 import com.maxidev.moviehub.feature.favorite.domain.repository.FavoriteRepository
@@ -29,6 +30,22 @@ class MovieDetailViewModel @Inject constructor(
                     movieDetail = repository.fetchMovieDetail(movieId)
                 )
             }
+        }
+
+    fun fetchMovieImages(movieId: Int) =
+        _detailState.update { images ->
+            images.copy(
+                movieImages = repository.fetchMovieImage(movieId)
+                    .cachedIn(viewModelScope)
+            )
+        }
+
+    fun fetchMovieCasting(movieId: Int) =
+        _detailState.update { casting ->
+            casting.copy(
+                movieCasting = repository.fetchMovieCasting(movieId)
+                    .cachedIn(viewModelScope)
+            )
         }
 
     fun isFavorite(movieId: Int): Flow<Boolean> = favoriteRepository.isFavorite(movieId)

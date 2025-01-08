@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
-import com.maxidev.moviehub.common.utils.formatDateUtils
 import kotlin.math.roundToInt
 
 @Composable
@@ -28,7 +27,6 @@ fun OtherInformationItem(
     runtime: Int,
     voteAverage: Double
 ) {
-    val formatDate = formatDateUtils(releaseDate)
     val textStyle = TextStyle.Default.copy(
         fontSize = 14.sp,
         fontWeight = FontWeight.Light,
@@ -54,7 +52,7 @@ fun OtherInformationItem(
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = "• Release date: $formatDate",
+                text = "• Release date: $releaseDate",
                 style = textStyle
             )
             Text(

@@ -4,8 +4,10 @@ package com.maxidev.moviehub.feature.detail.presentation
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Share
@@ -35,10 +37,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.feature.components.TopBarItem
-import com.maxidev.moviehub.feature.detail.domain.model.MovieDetail
+import com.maxidev.moviehub.feature.detail.presentation.components.BackgroundImagesItem
 import com.maxidev.moviehub.feature.detail.presentation.components.BelongsToCollectionItem
+import com.maxidev.moviehub.feature.detail.presentation.components.CastingContent
 import com.maxidev.moviehub.feature.detail.presentation.components.GenresItem
 import com.maxidev.moviehub.feature.detail.presentation.components.OtherInformationItem
 import com.maxidev.moviehub.feature.detail.presentation.components.OverviewItem
@@ -47,8 +51,7 @@ import com.maxidev.moviehub.feature.detail.presentation.components.ProductionCom
 import kotlinx.coroutines.launch
 
 // TODO: Navigate to collection
-// TODO: Add movie images
-// TODO: Add credits
+// TODO: Add pinch zoom to images
 
 @Composable
 fun MovieDetailView(
@@ -61,7 +64,7 @@ fun MovieDetailView(
     val topBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
     val sendIntent = Intent(Intent.ACTION_SEND).apply {
-        putExtra(Intent.EXTRA_TEXT, state.movieDetail?.homePage)
+        putExtra(Intent.EXTRA_TEXT, state.movieDetail.homePage)
         type = "text/plain"
     }
     val chooser = Intent.createChooser(sendIntent, "Share")
@@ -69,9 +72,11 @@ fun MovieDetailView(
 
     LaunchedEffect(Int) {
         viewModel.fetchMovieDetail(id)
+        viewModel.fetchMovieImages(id)
+        viewModel.fetchMovieCasting(id)
     }
 
-    DetailItem(
+    ScreenContent(
         isLiked = isFavorite,
         state = state,
         scrollBehavior = scrollBehavior,
@@ -95,30 +100,16 @@ fun MovieDetailView(
 }
 
 @Composable
-private fun DetailItem(
-    isLiked: Boolean,
-    state: MovieDetailState,
-    onEvent: (MovieDetailUiEvents) -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
-) {
-    val detail = state.movieDetail
-
-    ScreenContent(
-        isLiked = isLiked,
-        model = detail ?: return,
-        scrollBehavior = scrollBehavior,
-        onEvent = onEvent
-    )
-}
-
-@Composable
 private fun ScreenContent(
     isLiked: Boolean,
-    model: MovieDetail,
+    state: MovieDetailState,
     scrollBehavior: TopAppBarScrollBehavior,
     onEvent: (MovieDetailUiEvents) -> Unit
 ) {
-    val lazyListState = rememberLazyListState()
+    val detail = state.movieDetail
+    val images = state.movieImages.collectAsLazyPagingItems()
+    val casting = state.movieCasting.collectAsLazyPagingItems()
+    val verticalScroll = rememberScrollState()
     val scope = rememberCoroutineScope()
     val snackBarState = remember { SnackbarHostState() }
 
@@ -139,10 +130,10 @@ private fun ScreenContent(
                     }
                 },
                 actions = {
-                    if (model.homePage.isNotEmpty() || model.homePage.isNotBlank()) {
+                    if (detail.homePage.isNotEmpty() || detail.homePage.isNotBlank()) {
                         IconButton(
                             onClick = {
-                                onEvent(MovieDetailUiEvents.ShareIntent(model.homePage))
+                                onEvent(MovieDetailUiEvents.ShareIntent(detail.homePage))
                             }
                         ) {
                             Icon(
@@ -156,7 +147,7 @@ private fun ScreenContent(
                             if (isLiked) {
                                 onEvent(
                                     MovieDetailUiEvents.RemoveToFavorites(
-                                        remove = model.copy(favorite = false)
+                                        remove = state.movieDetail.copy(favorite = false)
                                     )
                                 )
                                 scope.launch {
@@ -168,7 +159,7 @@ private fun ScreenContent(
                             } else {
                                 onEvent(
                                     MovieDetailUiEvents.AddToFavorites(
-                                        add = model.copy(favorite = true)
+                                        add = state.movieDetail.copy(favorite = true)
                                     )
                                 )
                                 scope.launch {
@@ -191,48 +182,43 @@ private fun ScreenContent(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            state = lazyListState,
-            contentPadding = innerPadding,
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(verticalScroll),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            item {
-                PosterWithTextItem(
-                    backdropPath = model.backdropPath,
-                    title = model.title,
-                    tagline = model.tagline
-                )
-            }
-            item {
-                GenresItem(
-                    genres = model.genres
-                )
-            }
-            item {
-                OverviewItem(
-                    overview = model.overview
-                )
-            }
-            item {
-                OtherInformationItem(
-                    status = model.status,
-                    releaseDate = model.releaseDate,
-                    runtime = model.runtime,
-                    voteAverage = model.voteAverage
-                )
-            }
-            item {
-                ProductionCompaniesItem(
-                    companies = model.productionCompanies
-                )
-            }
-            item {
-                BelongsToCollectionItem(
-                    name = model.belongsToCollection.name,
-                    posterPath = model.belongsToCollection.posterPath
-                )
-            }
+            PosterWithTextItem(
+                backdropPath = detail.backdropPath,
+                title = detail.title,
+                tagline = detail.tagline
+            )
+            GenresItem(
+                genres = detail.genres
+            )
+            OverviewItem(
+                overview = detail.overview
+            )
+            CastingContent(
+                cast = casting
+            )
+            OtherInformationItem(
+                status = detail.status,
+                releaseDate = detail.releaseDate,
+                runtime = detail.runtime,
+                voteAverage = detail.voteAverage
+            )
+            ProductionCompaniesItem(
+                companies = detail.productionCompanies
+            )
+            BackgroundImagesItem(
+                images = images
+            )
+            BelongsToCollectionItem(
+                name = detail.belongsToCollection.name,
+                posterPath = detail.belongsToCollection.posterPath
+            )
         }
     }
 }
