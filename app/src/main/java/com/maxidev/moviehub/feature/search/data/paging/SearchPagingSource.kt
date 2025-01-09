@@ -14,7 +14,13 @@ class SearchPagingSource(
     private val query: String
 ):PagingSource<Int, Search>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Search>): Int = 1
+    override fun getRefreshKey(state: PagingState<Int, Search>): Int? {
+
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
+    }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Search> {
         return try {

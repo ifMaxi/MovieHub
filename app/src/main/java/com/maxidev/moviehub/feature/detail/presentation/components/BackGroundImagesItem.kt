@@ -15,16 +15,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.compose.LazyPagingItems
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.feature.components.ImageItem
-import com.maxidev.moviehub.feature.components.PagedRow
+import com.maxidev.moviehub.feature.components.RowLazyItem
 import com.maxidev.moviehub.feature.detail.domain.model.MovieImage
 
 @Composable
 fun BackgroundImagesItem(
     modifier: Modifier = Modifier,
-    images: LazyPagingItems<MovieImage>
+    images: List<MovieImage>
 ) {
     Box(
         modifier = modifier.padding(16.dp),
@@ -40,15 +39,15 @@ fun BackgroundImagesItem(
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.align(Alignment.Start)
             )
-            PagedRow(
+            RowLazyItem(
                 items = images,
                 key = { key -> key.backdrops },
-                content = {
+                content = { image ->
                     ImageItem(
                         modifier = Modifier
                             .aspectRatio(2f / 3f)
                             .size(width = 320.dp, height = 180.dp),
-                        imageUrl = it.backdrops,
+                        imageUrl = image.backdrops,
                         contentScale = ContentScale.FillBounds,
                         navigateToDetail = {}
                     )

@@ -16,6 +16,7 @@
     <string name="delete_all_favorites">Delete all favorites.</string>
     <string name="empty_resource">""</string>
     <string name="navigate_back">Navigate back</string>
+    <string name="navigate_to_home">Navigate to home</string>
     <string name="share">Share</string>
     <string name="part_of_the_collection">Part of the collection</string>
     <string name="production_companies">Production companies</string>

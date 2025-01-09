@@ -22,17 +22,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.compose.LazyPagingItems
 import coil3.compose.SubcomposeAsyncImage
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
-import com.maxidev.moviehub.feature.components.PagedRow
+import com.maxidev.moviehub.feature.components.RowLazyItem
 import com.maxidev.moviehub.feature.detail.domain.model.Casting
 
 @Composable
 fun CastingContent(
     modifier: Modifier = Modifier,
-    cast: LazyPagingItems<Casting>
+    cast: List<Casting>
 ) {
     Box(
         modifier = modifier.padding(16.dp),
@@ -48,14 +47,14 @@ fun CastingContent(
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.align(Alignment.Start)
             )
-            PagedRow(
+            RowLazyItem(
                 items = cast,
                 key = { key -> key.id },
-                content = {
+                content = { casting ->
                     CastingItem(
-                        name = it.name,
-                        profilePath = it.profilePath,
-                        character = it.character
+                        name = casting.name,
+                        profilePath = casting.profilePath,
+                        character = casting.character
                     )
                 }
             )

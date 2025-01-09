@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.detail.presentation.components.BackgroundImagesItem
@@ -48,10 +47,12 @@ import com.maxidev.moviehub.feature.detail.presentation.components.OtherInformat
 import com.maxidev.moviehub.feature.detail.presentation.components.OverviewItem
 import com.maxidev.moviehub.feature.detail.presentation.components.PosterWithTextItem
 import com.maxidev.moviehub.feature.detail.presentation.components.ProductionCompaniesItem
+import com.maxidev.moviehub.feature.navigation.NavDestinations
 import kotlinx.coroutines.launch
 
-// TODO: Navigate to collection
-// TODO: Add pinch zoom to images
+// TODO: Add fonts
+// TODO: Put colors on the app
+// TODO: Make tests
 
 @Composable
 fun MovieDetailView(
@@ -72,7 +73,7 @@ fun MovieDetailView(
 
     LaunchedEffect(Int) {
         viewModel.fetchMovieDetail(id)
-        viewModel.fetchMovieImages(id)
+        viewModel.fetchMovieImage(id)
         viewModel.fetchMovieCasting(id)
     }
 
@@ -94,6 +95,9 @@ fun MovieDetailView(
                 is MovieDetailUiEvents.ShareIntent -> {
                     context.startActivity(chooser)
                 }
+                is MovieDetailUiEvents.NavigateToCollection -> {
+                    navController.navigate(NavDestinations.CollectionScreen(events.collectionId))
+                }
             }
         }
     )
@@ -107,8 +111,8 @@ private fun ScreenContent(
     onEvent: (MovieDetailUiEvents) -> Unit
 ) {
     val detail = state.movieDetail
-    val images = state.movieImages.collectAsLazyPagingItems()
-    val casting = state.movieCasting.collectAsLazyPagingItems()
+    val images = state.movieImage
+    val casting = state.movieCasting
     val verticalScroll = rememberScrollState()
     val scope = rememberCoroutineScope()
     val snackBarState = remember { SnackbarHostState() }
@@ -216,8 +220,12 @@ private fun ScreenContent(
                 images = images
             )
             BelongsToCollectionItem(
+                id = detail.belongsToCollection.id,
                 name = detail.belongsToCollection.name,
-                posterPath = detail.belongsToCollection.posterPath
+                posterPath = detail.belongsToCollection.posterPath,
+                collectionId = {
+                    onEvent(MovieDetailUiEvents.NavigateToCollection(detail.belongsToCollection.id))
+                }
             )
         }
     }
