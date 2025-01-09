@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.maxidev.moviehub.feature.collection.presentation.CollectionScreen
 import com.maxidev.moviehub.feature.detail.presentation.MovieDetailView
 import com.maxidev.moviehub.feature.favorite.presentation.FavoritesView
 import com.maxidev.moviehub.feature.home.presentation.HomeView
@@ -89,6 +90,14 @@ fun NavigationGraph(
 
                 MovieDetailView(
                     id = args.id,
+                    navController = navHostController
+                )
+            }
+            composable<NavDestinations.CollectionScreen> { navBackStackEntry ->
+                val args = navBackStackEntry.toRoute<NavDestinations.CollectionScreen>()
+
+                CollectionScreen(
+                    collectionId = args.id,
                     navController = navHostController
                 )
             }

@@ -8,14 +8,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
 
 sealed interface NavDestinations {
-    @Serializable
-    data object MoviesScreen: NavDestinations
-    @Serializable
-    data object SearchScreen: NavDestinations
-    @Serializable
-    data object FavoriteScreen: NavDestinations
-    @Serializable
-    data class DetailMovieScreen(val id: Int): NavDestinations
+    @Serializable data object MoviesScreen: NavDestinations
+    @Serializable data object SearchScreen: NavDestinations
+    @Serializable data object FavoriteScreen: NavDestinations
+    @Serializable data class DetailMovieScreen(val id: Int): NavDestinations
+    @Serializable data class CollectionScreen(val id: Int): NavDestinations
 }
 
 sealed class NavBarDestinations(

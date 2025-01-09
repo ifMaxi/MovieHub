@@ -1,6 +1,7 @@
 package com.maxidev.moviehub.common.data.remote
 
 import com.maxidev.moviehub.common.data.remote.dto.CastingDto
+import com.maxidev.moviehub.common.data.remote.dto.CollectionDto
 import com.maxidev.moviehub.common.data.remote.dto.GenresDto
 import com.maxidev.moviehub.common.data.remote.dto.MovieDetailDto
 import com.maxidev.moviehub.common.data.remote.dto.MovieImageDto
@@ -50,7 +51,7 @@ interface ApiService {
     suspend fun getCredits(@Path("movie_id") movieId: Int): CastingDto
 
     @GET(COLLECTION_ID)
-    suspend fun getCollectionId(@Path("collection_id") collectionId: Int)
+    suspend fun getCollectionId(@Path("collection_id") collectionId: Int): CollectionDto
 }
 
 private const val MOVIES = "movie/"

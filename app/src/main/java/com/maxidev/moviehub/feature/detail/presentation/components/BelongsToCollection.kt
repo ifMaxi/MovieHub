@@ -32,8 +32,10 @@ import com.maxidev.moviehub.feature.components.ImageItem
 @Composable
 fun BelongsToCollectionItem(
     modifier: Modifier = Modifier,
+    id: Int,
     name: String,
-    posterPath: String
+    posterPath: String,
+    collectionId: (Int) -> Unit
 ) {
     if (posterPath.isNotEmpty() || posterPath.isNotBlank()) {
         Box(
@@ -51,9 +53,7 @@ fun BelongsToCollectionItem(
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.align(Alignment.Start)
                 )
-                OutlinedCard(
-                    elevation = CardDefaults.cardElevation(6.dp)
-                ) {
+                OutlinedCard(elevation = CardDefaults.cardElevation(6.dp)) {
                     ImageItem(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -61,7 +61,7 @@ fun BelongsToCollectionItem(
                             .aspectRatio(2f / 3f),
                         imageUrl = posterPath,
                         contentScale = ContentScale.Crop,
-                        navigateToDetail = {}
+                        navigateToDetail = { collectionId(id) }
                     )
 
                     Text(
@@ -93,8 +93,10 @@ fun BelongsToCollectionItem(
 private fun BelongsToCollectionItemPreview() {
     MovieHubTheme {
         BelongsToCollectionItem(
+            id = 0,
             name =  "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            posterPath = "Image"
+            posterPath = "Image",
+            collectionId = {}
         )
     }
 }
