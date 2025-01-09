@@ -21,8 +21,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 import com.maxidev.moviehub.feature.components.ImageItem
 
+/**
+ * A composable function that displays a header item for a collection.
+ *
+ * This item includes the collection's name, a poster image, and a brief overview.
+ * It's designed to be used at the top of a collection details screen or in a list of collections.
+ *
+ * @param modifier The modifier to be applied to the Box containing the header item.
+ * @param collectionName The name of the collection, displayed as a title.
+ * @param collectionOverview A brief description or overview of the collection.
+ * @param collectionPosterPath The URL or path to the poster image for the collection.
+ */
 @Composable
 fun CollectionHeaderItem(
     modifier: Modifier = Modifier,
@@ -43,7 +56,8 @@ fun CollectionHeaderItem(
             Text(
                 text = collectionName,
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = dmSansFont,
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
             ImageItem(
@@ -59,6 +73,7 @@ fun CollectionHeaderItem(
                 text = collectionOverview,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Light,
+                fontFamily = nunitoFont,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 10.dp)
             )

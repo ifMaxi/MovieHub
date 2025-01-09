@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
 
 @Composable
 fun HeaderItem(
@@ -22,7 +23,8 @@ fun HeaderItem(
         Text(
             text = stringResource(header),
             fontWeight = FontWeight.Medium,
-            fontSize = 20.sp
+            fontSize = 22.sp,
+            fontFamily = dmSansFont
         )
     }
 }

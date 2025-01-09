@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 
 @Composable
 fun GenreItem(
@@ -27,6 +28,7 @@ fun GenreItem(
         Card(elevation = CardDefaults.cardElevation(6.dp)) {
             Text(
                 text = name,
+                fontFamily = nunitoFont,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,

@@ -34,6 +34,16 @@ import com.maxidev.moviehub.feature.collection.presentation.components.Collectio
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.navigation.NavDestinations
 
+/**
+ * Composable function representing the Collection screen.
+ *
+ * This screen displays the details of a specific collection, fetched based on the provided `collectionId`.
+ * It manages the UI state using a [CollectionViewModel] and handles navigation events.
+ *
+ * @param collectionId The ID of the collection to display.
+ * @param viewModel The [CollectionViewModel] used to manage the collection's state. Defaults to a `hiltViewModel`.
+ * @param navController The [NavController] used for navigation within the app.
+ */
 @Composable
 fun CollectionScreen(
     collectionId: Int,
@@ -69,6 +79,11 @@ fun CollectionScreen(
     )
 }
 
+/**
+ * Composable function that displays the content of a movie collection.
+ *
+ * This composable renders a screen that shows the details of a movie collection, including
+ * */
 @Composable
 private fun CollectionContent(
     state: CollectionsState,

@@ -56,6 +56,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.maxidev.moviehub.R
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 import com.maxidev.moviehub.feature.components.HeaderItem
 import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.PagedRow
@@ -68,6 +69,13 @@ import retrofit2.HttpException
 import java.io.IOException
 import kotlin.math.absoluteValue
 
+/**
+ * [HomeView] is a composable function that represents the main screen of the application,
+ * displaying a list of movies and providing navigation to the detail screen.
+ *
+ * @param navController The navigation controller used for navigating to different screens.
+ * @param viewModel The [HomeViewModel] instance responsible for managing the state and logic of the home screen.
+ */
 @Composable
 fun HomeView(
     navController: NavController,
@@ -93,6 +101,20 @@ fun HomeView(
     )
 }
 
+/**
+ * Displays the main content of the home screen, including movie lists and genre information.
+ *
+ * This composable function renders the screen's content within a [Scaffold] and utilizes
+ * various components to display movie data fetched from different sources. It also handles
+ * pull-to-refresh functionality and vertical scrolling.
+ *
+ * @param state The [HomeState] containing the data to be displayed, such as trending,
+ * now playing, popular, top-rated, and upcoming movies, as well as genre information.
+ * @param scrollBehavior The [TopAppBarScrollBehavior] for managing the behavior of the top app bar,
+ * allowing it to react to scroll events.
+ * @param onEvent A lambda function that handles user interactions with the UI, such as pull-to-refresh
+ * and navigating to the movie detail screen. It takes a [HomeUiEvents] as a parameter.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenContent(
@@ -258,6 +280,34 @@ private fun ScreenContent(
     }
 }
 
+/**
+ * Displays a horizontal list of genre items.
+ *
+ * This composable renders a `LazyRow` to efficiently display a list of genres.
+ * Each genre is represented by a `GenreItem` composable.
+ *
+ * @param modifier Modifier to be applied to the container.
+ * @param genres The list of [Genres] to display. If the list is empty, nothing is displayed.
+ *
+ * Example Usage:
+ * ```
+ *  GenresContent(
+ *      modifier = Modifier.padding(16.dp),
+ *      genres = listOf(
+ *          Genres(1, "Action"),
+ *          Genres(2, "Comedy"),
+ *          Genres(3, "Drama")
+ *      )
+ *  )
+ * ```
+ *
+ * Notes:
+ * - Uses `LazyRow` for efficient rendering of potentially long lists.
+ * - Centers the content within the parent `Box`.
+ * - Adds horizontal padding to the `LazyRow`.
+ * - Spacing of 10.dp between genre items.
+ * - each item has a unique key by the genre id.
+ */
 @Composable
 private fun GenresContent(
     modifier: Modifier = Modifier,
@@ -287,6 +337,16 @@ private fun GenresContent(
     }
 }
 
+/**
+ * A composable function that displays a horizontally scrollable pager of items fetched using
+ * [LazyPagingItems]. It supports automatic scrolling, item-specific keys, and loading/error states.
+ *
+ * @param modifier The [Modifier] to be applied to the pager container.
+ * @param items The [LazyPagingItems] containing the data to be displayed.
+ * @param key A function that uniquely identifies each item in the pager. This is essential for
+ *            correct recomposition and state restoration.
+ * @param content A composable function that defines how each individual item should be rendered.
+ *                 It takes the item */
 @Composable
 private fun <T: Any> PagerRowItem(
     modifier: Modifier = Modifier,
@@ -387,6 +447,7 @@ private fun <T: Any> PagerRowItem(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(R.string.no_data_available),
+                            fontFamily = nunitoFont,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -405,6 +466,7 @@ private fun <T: Any> PagerRowItem(
                                 is IOException -> { stringResource(R.string.internet_problem) }
                                 else -> { stringResource(R.string.unknown_error) }
                             },
+                            fontFamily = nunitoFont,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -430,6 +492,7 @@ private fun <T: Any> PagerRowItem(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(R.string.error_occurred),
+                            fontFamily = nunitoFont,
                             textAlign = TextAlign.Center
                         )
                     }

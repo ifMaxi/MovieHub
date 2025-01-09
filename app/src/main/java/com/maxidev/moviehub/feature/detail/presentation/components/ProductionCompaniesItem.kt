@@ -18,7 +18,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 
+/**
+ * Composable function to display a list of production companies.
+ *
+ * This function takes a list of company names and displays them in a
+ * visually appealing format using a `FlowColumn`. Each company name is
+ * preceded by a bullet point.
+ *
+ * @param modifier The modifier to apply to the outer container.
+ * @param companies A list of strings representing the names of the production companies.
+ *
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProductionCompaniesItem(
@@ -39,12 +52,14 @@ fun ProductionCompaniesItem(
             Text(
                 text = stringResource(R.string.production_companies),
                 fontSize = 22.sp,
+                fontFamily = dmSansFont,
                 fontWeight = FontWeight.Medium
             )
 
             companies.forEach { item ->
                 Text(
                     text = "• $item",
+                    fontFamily = nunitoFont,
                     fontSize = 14.sp
                 )
             }

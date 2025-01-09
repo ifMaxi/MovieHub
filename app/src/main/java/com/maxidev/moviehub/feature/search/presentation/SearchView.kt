@@ -50,6 +50,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.SearchBarItem
 import com.maxidev.moviehub.feature.navigation.NavDestinations
@@ -58,6 +60,16 @@ import retrofit2.HttpException
 import java.io.IOException
 import kotlin.math.roundToInt
 
+/**
+ * A composable function representing the search view screen.
+ *
+ * This composable handles the display of the search UI, interaction with the
+ * search view model, and navigation to the detail screen.
+ *
+ * @param navController The NavController used for navigation between screens.
+ * @param viewModel The SearchViewModel responsible for managing the search state and logic.
+ *                  Defaults to a hiltViewModel instance.
+ */
 @Composable
 fun SearchView(
     navController: NavController,
@@ -97,6 +109,21 @@ fun SearchView(
     )
 }
 
+/**
+ * Displays the search content, including the search bar and the list of search results.
+ *
+ * This composable function manages the UI for searching and displaying results. It includes
+ * a search bar for user input, and a lazy column to display the results fetched from a
+ * paginated data source. It also handles different loading states and error scenarios.
+ *
+ * @param state The [SearchState] containing the search results and related data.
+ * @param input The current text input in the search bar.
+ * @param isExpanded A boolean indicating whether the search bar is expanded.
+ * @param clearText A callback function to clear the text in the search bar.
+ * @param onSearch A callback function triggered when the user initiates a search.
+ *        It receives the search query as a parameter.
+ * @param onInputChange A callback function triggered when the user changes the text input.
+ *        It receives the new input as a parameter */
 @Composable
 private fun SearchContent(
     state: SearchState,
@@ -122,6 +149,7 @@ private fun SearchContent(
                 placeholder = {
                     Text(
                         text = stringResource(R.string.search),
+                        fontFamily = nunitoFont,
                         modifier = Modifier.semantics { contentDescription = "Search" }
                     )
                 },
@@ -179,6 +207,7 @@ private fun SearchContent(
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
                                     text = stringResource(R.string.no_data_available),
+                                    fontFamily = nunitoFont,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -198,6 +227,7 @@ private fun SearchContent(
                                         is IOException -> { stringResource(R.string.internet_problem) }
                                         else -> { stringResource(R.string.unknown_error) }
                                     },
+                                    fontFamily = nunitoFont,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -229,6 +259,7 @@ private fun SearchContent(
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
                                     text = stringResource(R.string.something_wrong),
+                                    fontFamily = nunitoFont,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -240,6 +271,21 @@ private fun SearchContent(
     }
 }
 
+/**
+ * Composable function that displays a single result item, typically for a movie or TV show.
+ *
+ * This function displays a card with the item's poster, name, a brief overview, and the average vote.
+ * It's designed to be used within a list of results, and it provides a clickable area to navigate to
+ * the details page for the selected item.
+ *
+ * @param modifier Modifier to be applied to the root Box of the item.
+ * @param name The name of the item (e.g., movie title).
+ * @param overview A brief description of the item.
+ * @param posterPath The URL or path to the item's poster image.
+ * @param voteAverage The average vote for the item (out of 10).
+ * @param navigateToDetail A lambda function to be invoked when the item is clicked, typically used
+ *                         to navigate to the item's detail screen.
+ */
 @Composable
 private fun ResultItem(
     modifier: Modifier = Modifier,
@@ -287,6 +333,7 @@ private fun ResultItem(
                     Text(
                         text = name,
                         fontWeight = FontWeight.Medium,
+                        fontFamily = dmSansFont,
                         fontSize = 18.sp,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -298,6 +345,7 @@ private fun ResultItem(
                         text = overview,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Light,
+                        fontFamily = nunitoFont,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         lineHeight = 20.sp,
@@ -308,6 +356,7 @@ private fun ResultItem(
                     Text(
                         text = "⭐ ${voteAverage.roundToInt()} / 10",
                         fontSize = 12.sp,
+                        fontFamily = nunitoFont,
                         modifier = Modifier
                             .align(Alignment.Start)
                             .semantics { contentDescription = "$voteAverage" }

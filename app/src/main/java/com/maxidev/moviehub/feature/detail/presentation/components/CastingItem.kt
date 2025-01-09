@@ -25,9 +25,22 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.SubcomposeAsyncImage
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 import com.maxidev.moviehub.feature.components.RowLazyItem
 import com.maxidev.moviehub.feature.detail.domain.model.Casting
 
+/**
+ * Displays a list of cast members for a movie or show.
+ *
+ * This composable function takes a list of [Casting] objects and displays them in a
+ * horizontal scrolling row. Each cast member is represented by a [CastingItem]
+ * composable, showing their name, profile picture, and character.
+ *
+ * @param modifier The modifier to be applied to the layout.
+ * @param cast A list of [Casting] objects representing the cast members.
+ *
+ */
 @Composable
 fun CastingContent(
     modifier: Modifier = Modifier,
@@ -43,8 +56,9 @@ fun CastingContent(
         ) {
             Text(
                 text = stringResource(R.string.cast),
-                fontSize = 18.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Medium,
+                fontFamily = dmSansFont,
                 modifier = Modifier.align(Alignment.Start)
             )
             RowLazyItem(
@@ -62,6 +76,15 @@ fun CastingContent(
     }
 }
 
+/**
+ * A composable function that displays a single casting item, showing the actor's image, name, and the character they play.
+ *
+ * @param modifier The modifier to be applied to the root layout of the casting item.
+ * @param name The name of the actor.
+ * @param profilePath The relative path to the actor's profile image on the TMDB server.
+ *                    This path will be appended to the base URL "https://image.tmdb.org/t/p/original" to form the full image URL.
+ * @param character The name of the character the actor plays.
+ */
 @Composable
 private fun CastingItem(
     modifier: Modifier = Modifier,
@@ -101,6 +124,7 @@ private fun CastingItem(
                 Text(
                     text = name,
                     fontWeight = FontWeight.Medium,
+                    fontFamily = nunitoFont,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(6.dp)
@@ -109,6 +133,7 @@ private fun CastingItem(
                     text = character,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Light,
+                    fontFamily = nunitoFont,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(6.dp)

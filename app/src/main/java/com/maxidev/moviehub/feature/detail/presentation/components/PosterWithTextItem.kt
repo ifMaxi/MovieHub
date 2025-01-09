@@ -27,7 +27,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 
+/**
+ * A composable function that displays a poster image with a title and an optional tagline.
+ *
+ * The poster image is loaded from a URL constructed using the `backdropPath`.
+ * A gradient overlay is applied to the image for visual effect.
+ * The title is displayed below the image, and the tagline is displayed below the title if provided.
+ *
+ * @param modifier The modifier to be applied to the root Box.
+ * @param backdropPath The path to the backdrop image on the TMDB API. This will be appended to the base URL to fetch the image.
+ *                     Example: "/path/to/image.jpg".
+ * @param title The title to display below the image.
+ * @param tagline An optional tagline to display below the title. If empty or blank, the tagline won't be shown.
+ */
 @Composable
 fun PosterWithTextItem(
     modifier: Modifier = Modifier,
@@ -35,6 +50,8 @@ fun PosterWithTextItem(
     title: String,
     tagline: String
 ) {
+    val backdropUrl = "https://image.tmdb.org/t/p/original$backdropPath"
+
     Box(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -44,7 +61,7 @@ fun PosterWithTextItem(
         ) {
             if (backdropPath.isNotBlank() || backdropPath.isNotEmpty()) {
                 AsyncImage(
-                    model = "https://image.tmdb.org/t/p/original$backdropPath",
+                    model = backdropUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -71,8 +88,9 @@ fun PosterWithTextItem(
             }
             Text(
                 text = title,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Medium,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = dmSansFont,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -82,6 +100,7 @@ fun PosterWithTextItem(
                 Text(
                     text = "$tagline-",
                     fontSize = 12.sp,
+                    fontFamily = nunitoFont,
                     fontStyle = FontStyle.Italic,
                     modifier = Modifier
                         .semantics { contentDescription = tagline }

@@ -16,10 +16,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.R
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
 import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.RowLazyItem
 import com.maxidev.moviehub.feature.detail.domain.model.MovieImage
 
+/**
+ * A composable function that displays a list of background images for a movie.
+ *
+ * This function renders a section with a title "Background Images" and a horizontal
+ * list of images fetched from the provided [images] list. Each image is displayed
+ * as a separate item within the row.
+ *
+ * @param modifier The modifier to be applied to the container.
+ * @param images A list of [MovieImage] objects, each containing information about a background image.
+ */
 @Composable
 fun BackgroundImagesItem(
     modifier: Modifier = Modifier,
@@ -35,7 +46,8 @@ fun BackgroundImagesItem(
         ) {
             Text(
                 text = stringResource(R.string.background_images),
-                fontSize = 18.sp,
+                fontSize = 22.sp,
+                fontFamily = dmSansFont,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.align(Alignment.Start)
             )

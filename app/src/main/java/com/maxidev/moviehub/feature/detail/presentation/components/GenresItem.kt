@@ -21,7 +21,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 
+/**
+ * Displays a horizontal list of genre tags within a FlowRow layout.
+ *
+ * This composable function takes a list of genre strings and displays each
+ * genre as a circular card with the genre name enclosed in double quotes.
+ * The genres are arranged in a flowing layout that wraps to the next line
+ * if the available width is exceeded.
+ *
+ * @param modifier The modifier to be applied to the layout.
+ * @param genres A list of strings representing the genres to display.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GenresItem(
@@ -48,6 +60,7 @@ fun GenresItem(
                         text = "\"$genre\"",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
+                        fontFamily = nunitoFont,
                         modifier = Modifier
                             .padding(horizontal = 10.dp, vertical = 8.dp)
                             .semantics { contentDescription = genre }

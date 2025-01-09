@@ -27,8 +27,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxidev.moviehub.R
 import com.maxidev.moviehub.common.presentation.theme.MovieHubTheme
+import com.maxidev.moviehub.common.presentation.theme.dmSansFont
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 import com.maxidev.moviehub.feature.components.ImageItem
 
+/**
+ * Displays an item that belongs to a movie or TV show collection.
+ *
+ * This composable displays a card that represents a single item within a collection.
+ * It shows the item's poster image, name, and a label indicating it's part of a collection.
+ * Clicking on the poster navigates to the detail screen of the collection.
+ *
+ * @param modifier The modifier to apply to the layout.
+ * @param id The unique identifier of the collection.
+ * @param name The name of the collection.
+ * @param posterPath The URL or path to the poster image of the collection.
+ * @param collectionId A lambda function that is invoked when the user clicks on the poster.
+ *                     It passes the collection's `id` to handle navigation to its detail screen.
+ */
 @Composable
 fun BelongsToCollectionItem(
     modifier: Modifier = Modifier,
@@ -49,8 +65,9 @@ fun BelongsToCollectionItem(
             ) {
                 Text(
                     text = stringResource(R.string.part_of_the_collection),
-                    fontSize = 18.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Medium,
+                    fontFamily = dmSansFont,
                     modifier = Modifier.align(Alignment.Start)
                 )
                 OutlinedCard(elevation = CardDefaults.cardElevation(6.dp)) {
@@ -71,6 +88,7 @@ fun BelongsToCollectionItem(
                         style = TextStyle.Default.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Medium,
+                            fontFamily = nunitoFont,
                             lineHeight = 24.sp,
                             letterSpacing = 0.5.sp,
                             shadow = Shadow(

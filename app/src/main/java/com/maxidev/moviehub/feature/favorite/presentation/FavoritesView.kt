@@ -33,6 +33,19 @@ import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.detail.domain.model.MovieDetail
 
+/**
+ * Displays the user's favorite items.
+ *
+ * This composable function is responsible for rendering the UI that shows a list of the user's
+ * favorite items. It utilizes a [FavoritesViewModel] to manage the state of the favorites and
+ * handles user interactions such as deleting all favorites.
+ *
+ * @param viewModel The [FavoritesViewModel] instance used to manage the favorites data and state.
+ *                  Defaults to a new [FavoritesViewModel] instance obtained via Hilt's
+ *                  [hiltViewModel] if not provided.
+ *
+ * @OptIn ExperimentalMaterial3Api: This function uses experimental Material 3 APIs.
+ */
 @Composable
 fun FavoritesView(
     viewModel: FavoritesViewModel = hiltViewModel()
@@ -52,6 +65,17 @@ fun FavoritesView(
     )
 }
 
+/**
+ * Composable function that displays the content of the Favorites screen.
+ *
+ * This screen shows a grid of favorited movies, allowing the user to view
+ * their saved movies and delete all favorites at once.
+ *
+ * @param favorites A list of [MovieDetail] objects representing the user's favorited movies.
+ * @param scrollBehavior The [TopAppBarScrollBehavior] to handle scrolling behavior of the top app bar.
+ * @param onEvent A callback function to handle UI events, such as deleting all favorites.
+ *                It takes a [FavoritesUiEvents] object as a parameter.
+ */
 @Composable
 private fun FavoritesScreenContent(
     favorites: List<MovieDetail>,

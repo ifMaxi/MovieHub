@@ -50,10 +50,31 @@ import com.maxidev.moviehub.feature.detail.presentation.components.ProductionCom
 import com.maxidev.moviehub.feature.navigation.NavDestinations
 import kotlinx.coroutines.launch
 
-// TODO: Add fonts
-// TODO: Put colors on the app
-// TODO: Make tests
-
+/**
+ * Composable function that displays the detailed information of a specific movie.
+ *
+ * This function fetches and displays the movie's details, cast, and images. It also handles user interactions
+ * like adding/removing the movie from favorites, sharing the movie's homepage, and navigating back or to other screens.
+ *
+ * @param id The ID of the movie to display details for.
+ * @param viewModel The [MovieDetailViewModel] instance responsible for fetching and managing the movie's data.
+ *                  Defaults to a new instance provided by Hilt.
+ * @param navController The [NavController] instance for handling navigation within the app.
+ *
+ * Functionality:
+ * - **Data Fetching:** Fetches movie details, images, and casting information using the provided `viewModel`.
+ * - **State Management:** Observes the `detailState` and `isFavorite` states from the `viewModel` to update the UI.
+ * - **Favorite Handling:** Allows users to add or remove the movie from their favorites list.
+ * - **Sharing:** Provides functionality to share the movie's homepage via an intent.
+ * - **Navigation:** Allows navigation back to the previous screen or to a collection screen.
+ * - **UI Rendering:** Uses the [ScreenContent] composable to render the movie details based on the fetched data and user interactions.
+ *
+ * Side Effects:
+ * - **LaunchedEffect:** Fetches movie details, images, and casting when the `id` changes.
+ * - **collectAsStateWithLifecycle**: Collect data safely according to lifecycle.
+ * - **LocalContext**: Provides current composable context.
+ *
+ */
 @Composable
 fun MovieDetailView(
     id: Int,
@@ -103,6 +124,21 @@ fun MovieDetailView(
     )
 }
 
+/**
+ * Composable function that displays the detailed content of a movie.
+ *
+ * This function structures the UI for the movie detail screen, including
+ * the top app bar, movie information, and interactive elements. It handles
+ * user interactions such as navigating back, sharing the movie's homepage,
+ * and adding/removing the movie from favorites.
+ *
+ * @param isLiked Boolean indicating whether the movie is currently in the user's favorites.
+ * @param state The current state of the movie detail, encapsulated in a [MovieDetailState] object.
+ *              This includes details like the movie's title, overview, casting, images, etc.
+ * @param scrollBehavior A [TopAppBarScrollBehavior] object that manages the scroll behavior of the top app bar.
+ * @param onEvent A callback function triggered by UI events. It accepts a [MovieDetailUiEvents] object
+ *                representing the event, allowing the caller to handle actions like navigation, sharing,
+ *                and managing */
 @Composable
 private fun ScreenContent(
     isLiked: Boolean,

@@ -23,4 +23,6 @@
     <string name="genres">Genres</string>
     <string name="background_images">Background images</string>
     <string name="cast">Cast</string>
+    <string name="overview">Overview</string>
+    <string name="other_information">Other information</string>
 </resources>

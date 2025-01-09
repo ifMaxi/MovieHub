@@ -19,12 +19,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 import com.maxidev.moviehub.feature.collection.presentation.CollectionScreen
 import com.maxidev.moviehub.feature.detail.presentation.MovieDetailView
 import com.maxidev.moviehub.feature.favorite.presentation.FavoritesView
 import com.maxidev.moviehub.feature.home.presentation.HomeView
 import com.maxidev.moviehub.feature.search.presentation.SearchView
 
+/**
+ * [NavigationGraph] is the main navigation component for the application.
+ * It defines the navigation structure and handles the bottom navigation bar.
+ *
+ * @param navHostController The [NavHostController] responsible for navigating between screens.
+ * @param startDestination The initial screen to display. Defaults to [NavDestinations.MoviesScreen].
+ *
+ *  This Composable does the following:
+ *   1. **Manages Navigation**: Uses a [NavHostController] to control navigation between different screens.
+ *   2. **Bottom Navigation Bar**: Displays a [NavigationBar] at the bottom of the screen with items defined in [NavBarDestinations].
+ *   3. **Navigation Bar Item Selection**: Highlights the currently selected navigation bar item based on the current route.
+ *   4. **Navigation Bar Item Actions**: Handles clicks on navigation bar items, navigating to the corresponding screen while maintaining navigation state.
+ *   5. **Content Area**: Uses a [Scaffold] to organize the screen, placing the [NavigationBar] at the bottom and the screen content in the main area.
+ *   6. **NavHost Setup**:  Defines the [NavHost] to handle the actual composable screens, using the provided [NavHostController] and [startDestination].
+ *   7. **Screen Definitions**: Specifies how each destination within [NavDestinations] should be presented:
+ *       - **MoviesScreen**: Shows the [HomeView].
+ *       - **SearchScreen**: Shows the [
+ */
 @Composable
 fun NavigationGraph(
     navHostController: NavHostController,
@@ -58,6 +77,7 @@ fun NavigationGraph(
                         label = {
                             Text(
                                 text = view.title,
+                                fontFamily = nunitoFont,
                                 modifier = Modifier.semantics { contentDescription = view.title }
                             )
                         }
