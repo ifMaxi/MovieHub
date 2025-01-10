@@ -4,12 +4,15 @@ package com.maxidev.moviehub.feature.favorite.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,17 +24,22 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import com.maxidev.moviehub.R
-import com.maxidev.moviehub.feature.components.ImageItem
 import com.maxidev.moviehub.feature.components.TopBarItem
 import com.maxidev.moviehub.feature.detail.domain.model.MovieDetail
+import com.maxidev.moviehub.feature.favorite.presentation.components.DialogItem
 
 /**
  * Displays the user's favorite items.
@@ -53,13 +61,17 @@ fun FavoritesView(
     val state by viewModel.favoriteState.collectAsStateWithLifecycle()
     val topBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topBarState)
+    var openDialog by remember { mutableStateOf(false) }
 
     FavoritesScreenContent(
+        openDialog = openDialog,
         favorites = state.favorites,
         scrollBehavior = scrollBehavior,
         onEvent = { event ->
             when(event) {
                 FavoritesUiEvents.DeleteAllFavorites -> { viewModel.deleteAllFavorites() }
+                is FavoritesUiEvents.DismissDialog -> { openDialog = false }
+                is FavoritesUiEvents.OpenDialog -> { openDialog = true }
             }
         }
     )
@@ -78,6 +90,7 @@ fun FavoritesView(
  */
 @Composable
 private fun FavoritesScreenContent(
+    openDialog: Boolean,
     favorites: List<MovieDetail>,
     scrollBehavior: TopAppBarScrollBehavior,
     onEvent: (FavoritesUiEvents) -> Unit
@@ -91,7 +104,13 @@ private fun FavoritesScreenContent(
                 title = R.string.favorites,
                 navigationIcon = {},
                 actions = {
-                    IconButton(onClick = { onEvent(FavoritesUiEvents.DeleteAllFavorites) }) {
+                    IconButton(
+                        onClick = {
+                            onEvent(
+                                FavoritesUiEvents.OpenDialog(openDialog = openDialog)
+                            )
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = stringResource(R.string.delete_all_favorites)
@@ -103,7 +122,9 @@ private fun FavoritesScreenContent(
         }
     ) { innerPadding ->
         LazyVerticalGrid(
-            modifier = Modifier.padding(horizontal = 10.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 10.dp),
             contentPadding = innerPadding,
             state = lazyGridState,
             columns = GridCells.Adaptive(120.dp),
@@ -115,17 +136,33 @@ private fun FavoritesScreenContent(
                 key = { key -> key.id },
                 contentType = { type -> type::class }
             ) { movie ->
-                ImageItem(
+                val posterLink = "https://image.tmdb.org/t/p/original${movie.posterPath}"
+
+                AsyncImage(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .height(200.dp)
-                        .aspectRatio(2f / 3f),
-                    imageUrl = movie.posterPath,
-                    contentScale = ContentScale.FillBounds,
-                    navigateToDetail = { /* Do nothing. */ }
+                        .aspectRatio(2f / 3f)
+                        .clip(RoundedCornerShape(4)),
+                    model = posterLink,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds
                 )
             }
         }
     }
-}
 
-// TODO: Add alert dialog to delete all favorites.
+    if (openDialog) {
+        DialogItem(
+            onDismiss = {
+                onEvent(FavoritesUiEvents.DismissDialog(onDismiss = true))
+            },
+            onConfirmation = {
+                onEvent(FavoritesUiEvents.DeleteAllFavorites)
+                onEvent(FavoritesUiEvents.DismissDialog(onDismiss = true))
+            },
+            title = R.string.wait_alert,
+            text = R.string.delete_all_alert
+        )
+    }
+}

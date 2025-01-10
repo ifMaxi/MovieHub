@@ -25,4 +25,8 @@
     <string name="cast">Cast</string>
     <string name="overview">Overview</string>
     <string name="other_information">Other information</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="confirm">Confirm</string>
+    <string name="wait_alert">Wait!</string>
+    <string name="delete_all_alert">You are about to delete all your favorites. Are you sure you want to continue?</string>
 </resources>
