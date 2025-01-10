@@ -3,9 +3,7 @@ package com.maxidev.moviehub.feature.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -78,19 +76,6 @@ fun <T: Any> PagedRow(
 
             items.loadState.let { loadStates ->
                 when {
-                    loadStates.refresh is LoadState.Loading -> {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .align(Alignment.Center),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(strokeWidth = 2.dp)
-                            }
-                        }
-                    }
-
                     loadStates.refresh is LoadState.NotLoading && items.itemCount < 1 -> {
                         item {
                             Box(
@@ -128,22 +113,6 @@ fun <T: Any> PagedRow(
                                     },
                                     fontFamily = nunitoFont,
                                     textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-                    }
-
-                    loadStates.append is LoadState.Loading -> {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .size(16.dp),
-                                    strokeWidth = 2.dp
                                 )
                             }
                         }

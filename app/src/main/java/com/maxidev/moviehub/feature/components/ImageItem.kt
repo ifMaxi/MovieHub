@@ -1,6 +1,9 @@
 package com.maxidev.moviehub.feature.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -9,8 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
+import com.maxidev.moviehub.R
+import com.valentinilk.shimmer.shimmer
 
 /**
  * A composable function that displays an image within a card.
@@ -39,14 +45,26 @@ fun ImageItem(
         elevation = CardDefaults.cardElevation(6.dp),
         shape = RoundedCornerShape(4)
     ) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             modifier = modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(4))
                 .clickable { navigateToDetail() },
             model = baseImageUrl,
             contentDescription = null,
-            contentScale = contentScale
+            contentScale = contentScale,
+            loading = {
+                Image(
+                    painter = painterResource(R.drawable.darkgray),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .aspectRatio(2f / 3f)
+                        .clip(RoundedCornerShape(4))
+                        .shimmer()
+                )
+            }
         )
     }
 }
