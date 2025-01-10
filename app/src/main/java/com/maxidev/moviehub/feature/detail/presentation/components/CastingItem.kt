@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -29,6 +30,7 @@ import com.maxidev.moviehub.common.presentation.theme.dmSansFont
 import com.maxidev.moviehub.common.presentation.theme.nunitoFont
 import com.maxidev.moviehub.feature.components.RowLazyItem
 import com.maxidev.moviehub.feature.detail.domain.model.Casting
+import com.valentinilk.shimmer.shimmer
 
 /**
  * Displays a list of cast members for a movie or show.
@@ -112,6 +114,18 @@ private fun CastingItem(
                     model = asyncImageLink,
                     contentDescription = name,
                     contentScale = ContentScale.Crop,
+                    loading = {
+                        Image(
+                            painter = painterResource(R.drawable.darkgray),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .aspectRatio(2f / 3f)
+                                .clip(CircleShape)
+                                .shimmer()
+                        )
+                    },
                     error = {
                         if (profilePath.isEmpty()) {
                             Image(

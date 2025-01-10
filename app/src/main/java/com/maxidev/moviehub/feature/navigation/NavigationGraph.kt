@@ -54,7 +54,7 @@ fun NavigationGraph(
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar() {
                 NavBarDestinations.destinations.forEach { view ->
                     NavigationBarItem(
                         selected = currentRoute?.hierarchy?.any { navDestination ->
