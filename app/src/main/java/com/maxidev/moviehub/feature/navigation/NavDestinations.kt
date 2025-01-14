@@ -3,6 +3,7 @@ package com.maxidev.moviehub.feature.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
@@ -15,6 +16,7 @@ sealed interface NavDestinations {
     @Serializable data object MoviesScreen: NavDestinations
     @Serializable data object SearchScreen: NavDestinations
     @Serializable data object FavoriteScreen: NavDestinations
+    @Serializable data object SettingsScreen: NavDestinations
     @Serializable data class DetailMovieScreen(val id: Int): NavDestinations
     @Serializable data class CollectionScreen(val id: Int): NavDestinations
 }
@@ -49,12 +51,18 @@ sealed class NavBarDestinations(
         icon = Icons.Default.Star,
         title = "Favorites"
     )
+    data object SettingsScreen: NavBarDestinations(
+        route = NavDestinations.SettingsScreen,
+        icon = Icons.Default.Settings,
+        title = "Settings"
+    )
 
     companion object {
         val destinations = listOf(
             MovieScreen,
             SearchScreen,
-            FavoritesScreen
+            FavoritesScreen,
+            SettingsScreen
         )
     }
 }

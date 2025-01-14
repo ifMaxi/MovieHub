@@ -25,6 +25,7 @@ import com.maxidev.moviehub.feature.detail.presentation.MovieDetailView
 import com.maxidev.moviehub.feature.favorite.presentation.FavoritesView
 import com.maxidev.moviehub.feature.home.presentation.HomeView
 import com.maxidev.moviehub.feature.search.presentation.SearchView
+import com.maxidev.moviehub.feature.settings.presentation.SettingsView
 
 /**
  * [NavigationGraph] is the main navigation component for the application.
@@ -120,6 +121,9 @@ fun NavigationGraph(
                     collectionId = args.id,
                     navController = navHostController
                 )
+            }
+            composable<NavDestinations.SettingsScreen> {
+                SettingsView()
             }
         }
     }

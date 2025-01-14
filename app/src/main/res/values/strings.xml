@@ -24,9 +24,15 @@
     <string name="background_images">Background images</string>
     <string name="cast">Cast</string>
     <string name="overview">Overview</string>
+    <string name="settings">Settings</string>
     <string name="other_information">Other information</string>
     <string name="dismiss">Dismiss</string>
     <string name="confirm">Confirm</string>
     <string name="wait_alert">Wait!</string>
     <string name="delete_all_alert">You are about to delete all your favorites. Are you sure you want to continue?</string>
+    <string name="choose_theme">Choose theme</string>
+    <string name="dynamic_color">Dynamic color</string>
+    <string name="change_app_theme_content_description">Change app theme</string>
+    <string name="theme">Theme</string>
+    <string name="appearance">Appearance</string>
 </resources>
