@@ -90,8 +90,8 @@ fun SearchView(
         onSearch = {
             scope.launch {
                 viewModel.getSearchResults(it)
-                focusManager.clearFocus()
             }
+            focusManager.clearFocus(force = true)
         },
         onInputChange = viewModel::onInputChanged,
         onExpandedChange = { expanded = false },
