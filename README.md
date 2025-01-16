@@ -55,4 +55,4 @@ apiKey=your_api_key
  ```
 
 ## Video
-## Screenshots
+<video src="https://github.com/user-attachments/assets/44c74317-3c0c-4705-bcfe-4c6aa2214451" width="300" />
