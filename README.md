@@ -29,7 +29,7 @@ The goal of the project was to implement a simple and fast way for the user to s
 ![Retrofit](https://img.shields.io/badge/Retrofit-000000?style=for-the-badge&logo=librariesdotio)
 ![OkHtttp](https://img.shields.io/badge/OkHtttp-000000?style=for-the-badge&logo=librariesdotio)
 
-Jetpack Libraries
+Jetpack Libraries:
 - Hilt
 - ViewModel
 - Navigation
@@ -46,3 +46,13 @@ The pattern used for this project is MVVM (Model-View-ViewModel) which is a wide
 3. **ViewModel**: Acts as an intermediary between the Model and the View. It exposes data from the Model in a way that's easily consumable by the View. It also handles user interactions from the View and updates the Model accordingly. The ViewModel is lifecycle-aware, meaning it survives configuration changes like screen rotations.
 
 ![Mvvm arch](https://github.com/user-attachments/assets/011add8b-cd32-4ae7-b78e-60a2ca578a59)
+
+## Requirements
+
+Go to your  <b>`local.properties`</b> file and fill in using your [apikey](https://developer.themoviedb.org/docs/getting-started) from TMDB as follows:
+```gradle
+apiKey=your_api_key
+ ```
+
+## Video
+<video src="https://github.com/user-attachments/assets/44c74317-3c0c-4705-bcfe-4c6aa2214451" width="300" />
